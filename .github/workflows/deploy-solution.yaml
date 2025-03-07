@@ -23,30 +23,30 @@ jobs:
       AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}
       AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
 
-  group:
-    needs: [environment, validate]
-    name: Provision Resource Group 
-    runs-on: ubuntu-latest
-    outputs:
-      name: ${{ steps.resource.outputs.name }}
-    environment: 
-      name: ${{ needs.environment.outputs.name }}
+  # group:
+  #   needs: [environment, validate]
+  #   name: Provision Resource Group 
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     name: {{ steps.resource.outputs.name }}
+  #   environment: 
+  #     name: {{ needs.environment.outputs.name }}
 
-    steps:
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Create Group
-        id: resource
-        run: |
-          az group create --name $RESOURCE_GROUP \
-                          --location ${{ secrets.AZURE_LOCATION }} \
-                          --query name
-        env:
-          RESOURCE_GROUP: ${{ needs.environment.outputs.name }}-${{ secrets.AZURE_SUFFIX }}-${{ secrets.AZURE_UNIQUE_CODE }}
+  #   steps:
+  #     - uses: azure/login@v1
+  #       with:
+  #         creds: {{ secrets.AZURE_CREDENTIALS }}
+  #     - name: Create Group
+  #       id: resource
+  #       run: |
+  #         az group create --name {{ vars.AZURE_RESOURCE_GROUP }} \
+  #                         --location {{ secrets.AZURE_LOCATION }} \
+  #                         --query name
+        #env:
+          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
   
   apim:
-    needs: [environment, group]
+    needs: [environment]
     name: Provision APIM 
     runs-on: ubuntu-latest
     outputs:
@@ -62,17 +62,17 @@ jobs:
         id: resource
         run: |
           az apim create --name apim-${{ secrets.AZURE_SUFFIX }}-${{ secrets.AZURE_UNIQUE_CODE }} \
-                                  --resource-group $RESOURCE_GROUP \
+                                  --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
                                   --location ${{ secrets.AZURE_LOCATION }} \
                                   --publisher-email apim@contoso.com \
                                   --publisher-name Contoso \
                                   --sku-name Developer \
                                   --sku-capacity 1
-        env:
-          RESOURCE_GROUP: ${{ needs.environment.outputs.name }}-${{ secrets.AZURE_SUFFIX }}-${{ secrets.AZURE_UNIQUE_CODE }}
+        #env:
+          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
   
   registry:
-    needs: [environment, group]
+    needs: [environment]
     name: Provision ACR 
     runs-on: ubuntu-latest
     environment: 
@@ -85,12 +85,12 @@ jobs:
       - name: Create Registry
         id: resource
         run: |
-          az acr create --resource-group $RESOURCE_GROUP \
+          az acr create --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
                         --name $REGISTRY_NAME \
                         --sku Basic \
                         --admin-enabled true
         env:
-          RESOURCE_GROUP: ${{ needs.environment.outputs.name }}-${{ secrets.AZURE_SUFFIX }}-${{ secrets.AZURE_UNIQUE_CODE }}
+          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
           REGISTRY_NAME: acr${{ secrets.AZURE_SUFFIX }}${{ secrets.AZURE_UNIQUE_CODE }}
 
   build-accounting:

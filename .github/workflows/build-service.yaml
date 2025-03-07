@@ -45,10 +45,10 @@ jobs:
             exit 0
           fi
           az acr build --registry $REGISTRY \
-                       --resource-group $RESOURCE_GROUP \
+                       --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
                        --image ${{ inputs.repository }}/${{ inputs.image }}:latest \
                        --image ${{ inputs.repository }}/${{ inputs.image }}:$(echo ${GITHUB_SHA} | cut -c1-7) \
                        --file ./src/${{ inputs.project }}/Dockerfile ${{ inputs.context }}
         env:
           REGISTRY: acr${{ secrets.AZURE_SUFFIX }}${{ secrets.AZURE_UNIQUE_CODE }}
-          RESOURCE_GROUP: ${{ inputs.environment }}-${{ secrets.AZURE_SUFFIX }}-${{ secrets.AZURE_UNIQUE_CODE }}
+          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
