@@ -46,7 +46,7 @@ jobs:
           #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
   
   apim:
-    needs: [environment]
+    needs: [environment,validate]
     name: Provision APIM 
     runs-on: ubuntu-latest
     outputs:
@@ -72,7 +72,7 @@ jobs:
           #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
   
   registry:
-    needs: [environment]
+    needs: [environment,validate]
     name: Provision ACR 
     runs-on: ubuntu-latest
     environment: 
@@ -254,6 +254,7 @@ jobs:
       AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
   
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: [environment, registry, apim, build-accounting,build-bootstrapper,build-corporate-transfer,build-loyalty-service,build-makeline-service,build-order-service,build-receipt-service,build-ui,build-virtual-customer,build-virtual-worker]
     name: Deploy Bicep 
     runs-on: ubuntu-latest
