@@ -19,8 +19,8 @@ jobs:
       environment: ${{ needs.environment.outputs.name }}
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}
       AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
 
   # group:
@@ -43,7 +43,7 @@ jobs:
   #                         --location {{ secrets.AZURE_LOCATION }} \
   #                         --query name
         #env:
-          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
+          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ vars.AZURE_SUFFIX }}-{{ vars.AZURE_UNIQUE_CODE }}
   
   apim:
     needs: [environment,validate]
@@ -61,7 +61,7 @@ jobs:
       - name: Create Resource
         id: resource
         run: |
-          az apim create --name apim-${{ secrets.AZURE_SUFFIX }}-${{ secrets.AZURE_UNIQUE_CODE }} \
+          az apim create --name apim-${{ vars.AZURE_SUFFIX }}-${{ vars.AZURE_UNIQUE_CODE }} \
                                   --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
                                   --location ${{ secrets.AZURE_LOCATION }} \
                                   --publisher-email apim@contoso.com \
@@ -69,7 +69,7 @@ jobs:
                                   --sku-name Developer \
                                   --sku-capacity 1
         #env:
-          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
+          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ vars.AZURE_SUFFIX }}-{{ vars.AZURE_UNIQUE_CODE }}
   
   registry:
     needs: [environment,validate]
@@ -90,8 +90,8 @@ jobs:
                         --sku Basic \
                         --admin-enabled true
         env:
-          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
-          REGISTRY_NAME: acr${{ secrets.AZURE_SUFFIX }}${{ secrets.AZURE_UNIQUE_CODE }}
+          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ vars.AZURE_SUFFIX }}-{{ vars.AZURE_UNIQUE_CODE }}
+          REGISTRY_NAME: acr${{ vars.AZURE_SUFFIX }}${{ vars.AZURE_UNIQUE_CODE }}
 
   build-accounting:
     needs: [environment,registry]
@@ -106,8 +106,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-bootstrapper:
     needs: [environment,registry]
@@ -122,8 +122,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-corporate-transfer:
     needs: [environment,registry]
@@ -138,8 +138,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-loyalty-service:
     needs: [environment,registry]
@@ -154,8 +154,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-makeline-service:
     needs: [environment,registry]
@@ -170,8 +170,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-order-service:
     needs: [environment,registry]
@@ -186,8 +186,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-receipt-service:
     needs: [environment,registry]
@@ -202,8 +202,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-ui:
     needs: [environment,registry]
@@ -218,8 +218,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-virtual-customer:
     needs: [environment,registry]
@@ -234,8 +234,8 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
   build-virtual-worker:
     needs: [environment,registry]
@@ -250,13 +250,13 @@ jobs:
       skipExisting: true
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
   
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: [environment, registry, apim, build-accounting,build-bootstrapper,build-corporate-transfer,build-loyalty-service,build-makeline-service,build-order-service,build-receipt-service,build-ui,build-virtual-customer,build-virtual-worker]
-    name: Deploy Bicep 
+    name: Deploy Bicep
     runs-on: ubuntu-latest
     environment: 
       name: ${{ needs.environment.outputs.name }}
@@ -273,4 +273,4 @@ jobs:
                                   --template-file ./infra/main.bicep \
                                   --parameters name=${{ needs.environment.outputs.name }} \
                                   --parameters location=${{ secrets.AZURE_LOCATION }} \
-                                  --parameters uniqueSuffix=${{ secrets.AZURE_SUFFIX }}-${{ secrets.AZURE_UNIQUE_CODE }}
+                                  --parameters uniqueSuffix=${{ vars.AZURE_SUFFIX }}-${{ vars.AZURE_UNIQUE_CODE }}

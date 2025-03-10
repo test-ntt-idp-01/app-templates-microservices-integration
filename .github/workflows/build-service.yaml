@@ -50,5 +50,5 @@ jobs:
                        --image ${{ inputs.repository }}/${{ inputs.image }}:$(echo ${GITHUB_SHA} | cut -c1-7) \
                        --file ./src/${{ inputs.project }}/Dockerfile ${{ inputs.context }}
         env:
-          REGISTRY: acr${{ secrets.AZURE_SUFFIX }}${{ secrets.AZURE_UNIQUE_CODE }}
-          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ secrets.AZURE_SUFFIX }}-{{ secrets.AZURE_UNIQUE_CODE }}
+          REGISTRY: acr${{ vars.AZURE_SUFFIX }}${{ vars.AZURE_UNIQUE_CODE }}
+          #RESOURCE_GROUP: {{ needs.environment.outputs.name }}-{{ vars.AZURE_SUFFIX }}-{{ vars.AZURE_UNIQUE_CODE }}

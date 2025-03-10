@@ -25,8 +25,8 @@ jobs:
       environment: ${{ needs.environment.outputs.name }}
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}
       AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
 
   build:
@@ -42,6 +42,6 @@ jobs:
       skipExisting: false
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      AZURE_SUFFIX: ${{ secrets.AZURE_SUFFIX }}
-      AZURE_UNIQUE_CODE: ${{ secrets.AZURE_UNIQUE_CODE }}  
+      AZURE_SUFFIX: ${{ vars.AZURE_SUFFIX }}
+      AZURE_UNIQUE_CODE: ${{ vars.AZURE_UNIQUE_CODE }}  
 
